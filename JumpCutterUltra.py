@@ -53,7 +53,7 @@ def deletePath(s): # Dangerous! Watch out!
         print ("Deletion of the directory %s failed" % s)
         print(OSError)
 
-parser = argparse.ArgumentParser(description='Jump Cutter ULTRA Version 2019.7.5 Modifies a video file to play at different speeds when there is sound vs. silence. This version, AKA "Jump Cutter Ultra", has been modified to no longer require the user to specify the input framerate.  Instead it tries to get the fps of the input video from a text file produced by ffmpeg and feeds that back into ffmpeg during encoding.  If the fps of the input video cannot be obtained via the first method, Jump Cutter Ultra then uses the OpenCV-Python library to find it. This version has also been modified to allow the user to pass custom commands to ffmpeg. The original Python script was created by CaryKH, and can be found here: https://github.com/carykh/jumpcutter and has since been modified into Jump Cutter Ultra and compiled into a Windows binary by OPEN PC Reviews.')
+parser = argparse.ArgumentParser(description='Jump Cutter ULTRA Version 2019.7.6 Modifies a video file to play at different speeds when there is sound vs. silence. This version, AKA "Jump Cutter Ultra", has been modified to no longer require the user to specify the input framerate.  Instead it tries to get the fps of the input video from a text file produced by ffmpeg and feeds that back into ffmpeg during encoding.  If the fps of the input video cannot be obtained via the first method, Jump Cutter Ultra then uses the OpenCV-Python library to find it. This version has also been modified to allow the user to pass custom commands to ffmpeg. The original Python script was created by CaryKH, and can be found here: https://github.com/carykh/jumpcutter and has since been modified into Jump Cutter Ultra and compiled into a Windows binary by OPEN PC Reviews.')
 parser.add_argument('--input_file', type=str,  help='the video file you want modified')
 parser.add_argument('--url', type=str, help='A youtube url to download and process')
 parser.add_argument('--output_file', type=str, default="", help="the output file. (optional. if not included, it'll just modify the input file name)")
@@ -89,6 +89,8 @@ else:
 
 TEMP_FOLDER = "TEMP"
 AUDIO_FADE_ENVELOPE_SIZE = 400 # smooth out transitiion's audio by quickly fading in/out (arbitrary magic number whatever)
+
+deletePath(TEMP_FOLDER)
     
 createPath(TEMP_FOLDER)
 
@@ -129,8 +131,6 @@ samplesPerFrame = sampleRate/frameRate
 audioFrameCount = int(math.ceil(audioSampleCount/samplesPerFrame))
 
 hasLoudAudio = np.zeros((audioFrameCount))
-
-
 
 for i in range(audioFrameCount):
     start = int(i*samplesPerFrame)
@@ -207,4 +207,3 @@ command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.
 subprocess.call(command, shell=True)
 
 deletePath(TEMP_FOLDER)
-
